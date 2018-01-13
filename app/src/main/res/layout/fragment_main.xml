@@ -21,8 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="24sp"
-                android:text="@string/calories_label"/>
+                android:text="@string/calories_label"
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/calories_edit_text"
@@ -44,8 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="24sp"
-                android:text="@string/fat_label"/>
+                android:text="@string/fat_label"
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/fat_edit_text"
@@ -67,8 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="22sp"
-                android:text="@string/carbs_label"/>
+                android:text="@string/carbs_label"
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/carbs_edit_text"
@@ -90,8 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="24sp"
-                android:text="@string/protein_label"/>
+                android:text="@string/protein_label"
+                android:textSize="20sp"/>
 
             <EditText
                 android:id="@+id/protein_edit_text"
@@ -144,26 +144,19 @@
                 android:text="@string/undo_button"/>
         </LinearLayout>
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:elevation="1dp"
-        android:text="@string/add_button"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:elevation="1dp"
+            android:text="@string/add_button"/>
 
         <Button
             android:id="@+id/reset_button"
@@ -184,6 +177,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -192,14 +186,14 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/total_label"
-            android:textSize="24sp"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/calorie_total_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="22sp"
+            android:textSize="20sp"
             tools:text="@string/calories_label"/>
 
         <TextView
@@ -207,7 +201,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="22sp"
+            android:textSize="20sp"
             tools:text="@string/fat_label"/>
 
         <TextView
@@ -223,7 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="22sp"
+            android:textSize="20sp"
             tools:text="@string/protein_label"/>
     </LinearLayout>
 </LinearLayout>
