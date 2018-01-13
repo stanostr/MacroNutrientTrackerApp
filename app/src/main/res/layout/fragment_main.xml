@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="24sp"
-                tools:text="@string/calories_label"/>
+                android:text="@string/calories_label"/>
 
             <EditText
                 android:id="@+id/calories_edit_text"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="24sp"
-                tools:text="@string/fat_label"/>
+                android:text="@string/fat_label"/>
 
             <EditText
                 android:id="@+id/fat_edit_text"
@@ -67,8 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="24sp"
-                tools:text="@string/carbs_label"/>
+                android:textSize="22sp"
+                android:text="@string/carbs_label"/>
 
             <EditText
                 android:id="@+id/carbs_edit_text"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="24sp"
-                tools:text="@string/protein_label"/>
+                android:text="@string/protein_label"/>
 
             <EditText
                 android:id="@+id/protein_edit_text"
@@ -127,8 +127,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:text="Button"
-                tools:text="@string/redo_button"/>
+                android:text="@string/redo_button"/>
 
             <Button
                 android:id="@+id/undo_button"
@@ -180,5 +179,51 @@
             android:elevation="2dp"
             android:text="@string/reset_button"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/totals_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/total_label"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/calorie_total_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            tools:text="@string/calories_label"/>
+
+        <TextView
+            android:id="@+id/fat_total_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            tools:text="@string/fat_label"/>
+
+        <TextView
+            android:id="@+id/carb_total_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            tools:text="@string/carbs_label"/>
+
+        <TextView
+            android:id="@+id/protein_total_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="22sp"
+            tools:text="@string/protein_label"/>
     </LinearLayout>
 </LinearLayout>
