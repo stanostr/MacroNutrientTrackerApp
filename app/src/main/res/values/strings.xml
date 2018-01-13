@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MacroTracker</string>
+    <string name="reset_button">Reset Total</string>
+    <string name="add_button">Add to total</string>
+    <string name="undo_button">Undo</string>
+    <string name="redo_button">Redo</string>
+    <string name="reset_warning">Are you sure?</string>
+    <string name="calories_label">Calories:</string>
+    <string name="fat_label">Fat:</string>
+    <string name="carbs_label">Carbohydrates:</string>
+    <string name="protein_label">Protein:</string>
+    <string name="total_label">Your totals today:</string>
+</resources>
