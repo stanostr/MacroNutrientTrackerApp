@@ -1,7 +1,9 @@
 package com.stanislavveliky.macrotracker;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,10 +82,7 @@ public class MainFragment extends Fragment {
         mResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDailyTotalStack.push(new DailyTotal(mDailyTotal));
-                mDailyTotal.clear();
-                clearFields();
-                updateTextViews();
+                createDialog();
             }
         });
         mUndoButton = (Button) v.findViewById(R.id.undo_button);
@@ -154,4 +153,35 @@ public class MainFragment extends Fragment {
         if(mCarbField.getText().toString().equals("")) mCarbField.setText("0");
         if(mProteinField.getText().toString().equals("")) mProteinField.setText("0");
     }
+
+    private void createDialog()
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+        builder1.setMessage(R.string.alert_dialog);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mDailyTotalStack.push(new DailyTotal(mDailyTotal));
+                        mDailyTotal.clear();
+                        clearFields();
+                        updateTextViews();
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                R.string.no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder1.create();
+        alert.show();
+    }
+
 }
