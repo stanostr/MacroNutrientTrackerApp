@@ -1,23 +1,26 @@
 package com.stanislavveliky.macrotracker;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by stan_ on 1/10/2018.
  */
 
 public class MainFragment extends Fragment {
-
     private static final String TAG = "MainFragment";
+    private static final String KEY_DAILY_TOTAL = "daily_total";
     private DailyTotal mDailyTotal;
+    private DailyTotalStack mDailyTotalStack;
 
     private EditText mCalorieField;
     private EditText mFatField;
@@ -38,7 +41,13 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        mDailyTotal = DailyTotal.get(getActivity());
+        mDailyTotalStack = DailyTotalStack.get(getActivity());
+        if(savedInstanceState!=null)
+        {
+            double [] values = savedInstanceState.getDoubleArray(KEY_DAILY_TOTAL);
+            mDailyTotal = new DailyTotal(values[0], values[1], values[2], values[3]);
+        }
+        else mDailyTotal = new DailyTotal();
     }
 
     @Override
@@ -60,14 +69,12 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 fixBlankInput();
-                mDailyTotal.addCalories(Integer.valueOf(mCalorieField.getText().toString()));
-                mDailyTotal.addFat(Integer.valueOf(mFatField.getText().toString()));
-                mDailyTotal.addCarbs(Integer.valueOf(mCarbField.getText().toString()));
-                mDailyTotal.addProtein(Integer.valueOf(mProteinField.getText().toString()));
-                mCalTotalTextView.setText(getString(R.string.calories_label) + " " + mDailyTotal.getCalories());
-                mFatTotalTextView.setText(getString(R.string.fat_label) + " " + mDailyTotal.getFat());
-                mCarbTotalTextView.setText(getString(R.string.carbs_label) + " " + mDailyTotal.getCarbs());
-                mProteinTotalTextView.setText(getString(R.string.protein_label) + " " + mDailyTotal.getProtein());
+                mDailyTotalStack.push(new DailyTotal(mDailyTotal));
+                mDailyTotal.addCalories(Double.valueOf(mCalorieField.getText().toString()));
+                mDailyTotal.addFat(Double.valueOf(mFatField.getText().toString()));
+                mDailyTotal.addCarbs(Double.valueOf(mCarbField.getText().toString()));
+                mDailyTotal.addProtein(Double.valueOf(mProteinField.getText().toString()));
+                updateTextViews();
                 clearFields();
             }
         });
@@ -75,35 +82,60 @@ public class MainFragment extends Fragment {
         mResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reset();
+                createDialog();
             }
         });
         mUndoButton = (Button) v.findViewById(R.id.undo_button);
         mUndoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(!mDailyTotalStack.canUndo())
+                {
+                    Toast.makeText(getActivity(), R.string.cant_undo, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    mDailyTotal = mDailyTotalStack.undo();
+                    updateTextViews();
+                }
             }
         });
         mRedoButton = (Button) v.findViewById(R.id.redo_button);
         mRedoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(!mDailyTotalStack.canRedo())
+                {
+                    Toast.makeText(getActivity(), R.string.cant_redo, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    mDailyTotal = mDailyTotalStack.redo();
+                    updateTextViews();
+                }
             }
         });
-        reset();
+        updateTextViews();
         return v;
     }
 
-    private void reset()
+    @Override
+    public void onSaveInstanceState(Bundle onSavedInstanceState)
     {
-        mDailyTotal.clear();
-        clearFields();
-        mCalTotalTextView.setText(getString(R.string.calories_label) + " 0");
-        mFatTotalTextView.setText(getString(R.string.fat_label) + " 0");
-        mCarbTotalTextView.setText(getString(R.string.carbs_label) + " 0");
-        mProteinTotalTextView.setText(getString(R.string.protein_label) + " 0");
+        super.onSaveInstanceState(onSavedInstanceState);
+        if(mDailyTotal!=null) {
+            double[] values = {mDailyTotal.getCalories(), mDailyTotal.getFat(),
+                    mDailyTotal.getCarbs(), mDailyTotal.getProtein()};
+            onSavedInstanceState.putDoubleArray(KEY_DAILY_TOTAL, values);
+        }
+    }
+
+    private void updateTextViews()
+    {
+        mCalTotalTextView.setText(getString(R.string.calories_label) + " " + mDailyTotal.getCalories());
+        mFatTotalTextView.setText(getString(R.string.fat_label) + " " + mDailyTotal.getFat());
+        mCarbTotalTextView.setText(getString(R.string.carbs_label) + " " + mDailyTotal.getCarbs());
+        mProteinTotalTextView.setText(getString(R.string.protein_label) + " " + mDailyTotal.getProtein());
     }
 
     private void clearFields()
@@ -122,5 +154,34 @@ public class MainFragment extends Fragment {
         if(mProteinField.getText().toString().equals("")) mProteinField.setText("0");
     }
 
+    private void createDialog()
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+        builder1.setMessage(R.string.alert_dialog);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mDailyTotalStack.push(new DailyTotal(mDailyTotal));
+                        mDailyTotal.clear();
+                        clearFields();
+                        updateTextViews();
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                R.string.no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder1.create();
+        alert.show();
+    }
 
 }

@@ -14,21 +14,29 @@ public class DailyTotal {
     private double mCarbs;
     private double mProtein;
 
-    public static DailyTotal get(Context context)
-    {
-        if(sDailyTotal==null)
-        {
-            sDailyTotal = new DailyTotal(context);
-        }
-        return sDailyTotal;
-    }
-
-    private DailyTotal(Context context)
+    public DailyTotal()
     {
         mCalories = 0;
         mFat = 0;
         mCarbs = 0;
         mProtein = 0;
+    }
+
+    public DailyTotal(double calories, double fat, double carbs, double protein)
+    {
+        mCalories=calories;
+        mFat=fat;
+        mCarbs=carbs;
+        mProtein=protein;
+    }
+
+    //copy constructor
+    public DailyTotal(DailyTotal dt)
+    {
+        mCalories = dt.getCalories();
+        mFat = dt.getFat();
+        mCarbs = dt.getCarbs();
+        mProtein = dt.getProtein();
     }
 
     public void addCalories(double amount)
@@ -89,11 +97,6 @@ public class DailyTotal {
         mFat = 0;
         mCarbs = 0;
         mProtein = 0;
-    }
-
-    private void saveState()
-    {
-
     }
 
 }
