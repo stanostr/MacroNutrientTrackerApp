@@ -10,4 +10,6 @@
     <string name="carbs_label">Carbohydrates:</string>
     <string name="protein_label">Protein:</string>
     <string name="total_label">Your totals today:</string>
+    <string name="cant_undo">Cannot undo.</string>
+    <string name="cant_redo">Cannot redo.</string>
 </resources>

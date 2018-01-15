@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment";
+    private static final String KEY_DAILY_TOTAL = "daily_total";
     private DailyTotal mDailyTotal;
     private DailyTotalStack mDailyTotalStack;
 
@@ -39,7 +40,12 @@ public class MainFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
         mDailyTotalStack = DailyTotalStack.get(getActivity());
-        mDailyTotal = new DailyTotal();
+        if(savedInstanceState!=null)
+        {
+            double [] values = savedInstanceState.getDoubleArray(KEY_DAILY_TOTAL);
+            mDailyTotal = new DailyTotal(values[0], values[1], values[2], values[3]);
+        }
+        else mDailyTotal = new DailyTotal();
     }
 
     @Override
@@ -76,7 +82,8 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 mDailyTotalStack.push(new DailyTotal(mDailyTotal));
                 mDailyTotal.clear();
-                reset();
+                clearFields();
+                updateTextViews();
             }
         });
         mUndoButton = (Button) v.findViewById(R.id.undo_button);
@@ -109,17 +116,19 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-        reset();
+        updateTextViews();
         return v;
     }
 
-    private void reset()
+    @Override
+    public void onSaveInstanceState(Bundle onSavedInstanceState)
     {
-        clearFields();
-        mCalTotalTextView.setText(getString(R.string.calories_label) + " 0");
-        mFatTotalTextView.setText(getString(R.string.fat_label) + " 0");
-        mCarbTotalTextView.setText(getString(R.string.carbs_label) + " 0");
-        mProteinTotalTextView.setText(getString(R.string.protein_label) + " 0");
+        super.onSaveInstanceState(onSavedInstanceState);
+        if(mDailyTotal!=null) {
+            double[] values = {mDailyTotal.getCalories(), mDailyTotal.getFat(),
+                    mDailyTotal.getCarbs(), mDailyTotal.getProtein()};
+            onSavedInstanceState.putDoubleArray(KEY_DAILY_TOTAL, values);
+        }
     }
 
     private void updateTextViews()
