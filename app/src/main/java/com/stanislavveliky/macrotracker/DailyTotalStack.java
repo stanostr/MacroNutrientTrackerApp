@@ -1,21 +1,20 @@
 package com.stanislavveliky.macrotracker;
 
-import android.content.Context;
 import java.util.Stack;
-
+import android.util.Log;
 /**
  * Singleton to represent two stacks of daily total information
  * undostack represents the stacks that can be returned to
  * redostack represents undone stacks that can be redone after an undo operation
  * @author stan_
  */
-public class DailyTotalStack {
+public class  DailyTotalStack {
     private static final String TAG = "DailyTotalStack";
     private static DailyTotalStack sDailyTotalStack;
     private Stack <DailyTotal> undoStack;
     private Stack <DailyTotal> redoStack;
 
-    public static DailyTotalStack get(Context context)
+    public static DailyTotalStack get()
     {
         if(sDailyTotalStack ==null)
            sDailyTotalStack = new DailyTotalStack();
@@ -33,12 +32,16 @@ public class DailyTotalStack {
      * @param value to be added to undo stack
      */
     public void push(DailyTotal value) {
-
         undoStack.push(value);
         redoStack.clear();
+        logStackSize();
     }
 
-    // returns whether or not an undo can be done
+    private void logStackSize() {
+        Log.d(TAG, "undostack " + undoStack.size() + " redostack " + redoStack.size());
+    }
+
+    // returns whether or not an undo can be performed
     public boolean canUndo() {
         return !undoStack.isEmpty();
     }
@@ -47,12 +50,12 @@ public class DailyTotalStack {
      * gets the top item off the undo stack, as well as adds it to the redo stack
      * @return the top item of the undo stack
      */
-    public DailyTotal undo() {
+    public DailyTotal undo(DailyTotal current) {
         if (!canUndo()) {
             throw new IllegalStateException();
         }
         else {
-            redoStack.push(new DailyTotal(undoStack.peek()));
+            redoStack.push(current);
             return undoStack.pop();
         }
     }
@@ -66,13 +69,19 @@ public class DailyTotalStack {
      * returns top item from redo stack and also adds it to undo stack
      * @return top item from redo stack
      */
-    public DailyTotal redo() {
+    public DailyTotal redo(DailyTotal current) {
         if (!canRedo()) {
             throw new IllegalStateException();
         }
         else {
-            undoStack.push(new DailyTotal(redoStack.peek()));
+            undoStack.push(current);
             return redoStack.pop();
         }
+    }
+
+    public void clear()
+    {
+        redoStack.clear();
+        undoStack.clear();
     }
 }
