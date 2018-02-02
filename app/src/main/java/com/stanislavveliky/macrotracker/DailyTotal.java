@@ -95,5 +95,4 @@ public class DailyTotal {
         mCarbs = 0;
         mProtein = 0;
     }
-
 }
