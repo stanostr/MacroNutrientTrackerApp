@@ -41,7 +41,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        mDailyTotalStack = DailyTotalStack.get(getActivity());
+        mDailyTotalStack = DailyTotalStack.get();
         if(savedInstanceState!=null)
         {
             double [] values = savedInstanceState.getDoubleArray(KEY_DAILY_TOTAL);
@@ -95,7 +95,7 @@ public class MainFragment extends Fragment {
                 }
                 else
                 {
-                    mDailyTotal = mDailyTotalStack.undo();
+                    mDailyTotal = mDailyTotalStack.undo(mDailyTotal);
                     updateTextViews();
                 }
             }
@@ -110,7 +110,7 @@ public class MainFragment extends Fragment {
                 }
                 else
                 {
-                    mDailyTotal = mDailyTotalStack.redo();
+                    mDailyTotal = mDailyTotalStack.redo(mDailyTotal);
                     updateTextViews();
                 }
             }
@@ -164,11 +164,12 @@ public class MainFragment extends Fragment {
                 R.string.yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mDailyTotalStack.push(new DailyTotal(mDailyTotal));
+                        mDailyTotalStack.clear();
                         mDailyTotal.clear();
                         clearFields();
                         updateTextViews();
                         dialog.cancel();
+
                     }
                 });
 
@@ -183,5 +184,4 @@ public class MainFragment extends Fragment {
         AlertDialog alert = builder1.create();
         alert.show();
     }
-
 }

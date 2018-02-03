@@ -1,10 +1,7 @@
 package com.stanislavveliky.macrotracker;
 
-import android.content.Context;
-
 /**
  * Created by stan_ on 1/8/2018.
- * singleton to represent daily running totals
  */
 
 public class DailyTotal {
@@ -98,5 +95,4 @@ public class DailyTotal {
         mCarbs = 0;
         mProtein = 0;
     }
-
 }
