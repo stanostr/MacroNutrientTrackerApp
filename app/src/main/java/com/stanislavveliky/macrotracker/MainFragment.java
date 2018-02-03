@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,9 +31,6 @@ public class MainFragment extends Fragment {
     private EditText mProteinField;
 
     private Button mAddButton;
-    private Button mResetButton;
-    private Button mUndoButton;
-    private Button mRedoButton;
 
     private TextView mCalTotalTextView;
     private TextView mFatTotalTextView;
@@ -41,6 +41,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mDailyTotalStack = DailyTotalStack.get();
         if(savedInstanceState!=null)
         {
@@ -78,17 +79,25 @@ public class MainFragment extends Fragment {
                 clearFields();
             }
         });
-        mResetButton = (Button) v.findViewById(R.id.reset_button);
-        mResetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        updateTextViews();
+        return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId()) {
+            case R.id.menu_item_reset:
                 createDialog();
-            }
-        });
-        mUndoButton = (Button) v.findViewById(R.id.undo_button);
-        mUndoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                return true;
+            case R.id.menu_item_undo:
                 if(!mDailyTotalStack.canUndo())
                 {
                     Toast.makeText(getActivity(), R.string.cant_undo, Toast.LENGTH_SHORT).show();
@@ -98,12 +107,8 @@ public class MainFragment extends Fragment {
                     mDailyTotal = mDailyTotalStack.undo(mDailyTotal);
                     updateTextViews();
                 }
-            }
-        });
-        mRedoButton = (Button) v.findViewById(R.id.redo_button);
-        mRedoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                return true;
+            case R.id.menu_item_redo:
                 if(!mDailyTotalStack.canRedo())
                 {
                     Toast.makeText(getActivity(), R.string.cant_redo, Toast.LENGTH_SHORT).show();
@@ -113,10 +118,8 @@ public class MainFragment extends Fragment {
                     mDailyTotal = mDailyTotalStack.redo(mDailyTotal);
                     updateTextViews();
                 }
-            }
-        });
-        updateTextViews();
-        return v;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
